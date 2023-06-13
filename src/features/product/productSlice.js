@@ -34,7 +34,7 @@ export const deleteProducts = createAsyncThunk(
 );
 
 export const getProductDetail = createAsyncThunk(
-  "product/delete-products",
+  "product/get-product-detail",
   async (id, thunkAPI) => {
     try {
       return await productService.getProductDetail(id);

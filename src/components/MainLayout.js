@@ -33,7 +33,7 @@ const MainLayout = () => {
           }}
           items={[
             {
-              key: "products",
+              key: "",
               icon: <AiOutlineShoppingCart className="fs-4" />,
               label: "Sản phảm",
             },

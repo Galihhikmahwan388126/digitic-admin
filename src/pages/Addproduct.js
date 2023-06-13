@@ -28,8 +28,8 @@ const ProductForm = ({ mode, initialValues, onSubmit }) => {
     dispatch(getCategories());
   }, []);
 
-  const brandState = useSelector((state) => state.brand.brands);
-  const catState = useSelector((state) => state.pCategory.pCategories);
+  // const brandState = useSelector((state) => state.brand.brands);
+  // const catState = useSelector((state) => state.pCategory.pCategories);
   const imgState = useSelector((state) => state.upload.images);
   const newProduct = useSelector((state) => state.product);
   const { isSuccess, isError, isLoading, createdProduct } = newProduct;
@@ -92,10 +92,8 @@ const ProductForm = ({ mode, initialValues, onSubmit }) => {
             onChng={formik.handleChange("title")}
             onBlr={formik.handleBlur("title")}
             val={formik.values.title}
+            error={formik.touched.title && formik.errors.title}
           />
-          <div className="error">
-            {formik.touched.title && formik.errors.title}
-          </div>
           <div className="">
             <ReactQuill
               theme="snow"
@@ -103,10 +101,11 @@ const ProductForm = ({ mode, initialValues, onSubmit }) => {
               onChange={formik.handleChange("description")}
               value={formik.values.description}
             />
+            <div className="error">
+              {formik.touched.description && formik.errors.description}
+            </div>
           </div>
-          <div className="error">
-            {formik.touched.description && formik.errors.description}
-          </div>
+
           <CustomInput
             type="number"
             label="Enter Product Price"
@@ -114,50 +113,8 @@ const ProductForm = ({ mode, initialValues, onSubmit }) => {
             onChng={formik.handleChange("price")}
             onBlr={formik.handleBlur("price")}
             val={formik.values.price}
+            error={formik.touched.price && formik.errors.price}
           />
-          <div className="error">
-            {formik.touched.price && formik.errors.price}
-          </div>
-          <select
-            name="brand"
-            onChange={formik.handleChange("brand")}
-            onBlur={formik.handleBlur("brand")}
-            value={formik.values.brand}
-            className="form-control py-3 mb-3"
-            id=""
-          >
-            <option value="">Select Brand</option>
-            {brandState.map((i, j) => {
-              return (
-                <option key={j} value={i.title}>
-                  {i.title}
-                </option>
-              );
-            })}
-          </select>
-          <div className="error">
-            {formik.touched.brand && formik.errors.brand}
-          </div>
-          <select
-            name="category"
-            onChange={formik.handleChange("category")}
-            onBlur={formik.handleBlur("category")}
-            value={formik.values.category}
-            className="form-control py-3 mb-3"
-            id=""
-          >
-            <option value="">Select Category</option>
-            {catState.map((i, j) => {
-              return (
-                <option key={j} value={i.title}>
-                  {i.title}
-                </option>
-              );
-            })}
-          </select>
-          <div className="error">
-            {formik.touched.category && formik.errors.category}
-          </div>
           <select
             name="tags"
             onChange={formik.handleChange("tags")}
@@ -166,9 +123,6 @@ const ProductForm = ({ mode, initialValues, onSubmit }) => {
             className="form-control py-3 mb-3"
             id=""
           >
-            <option value="" disabled>
-              Select Category
-            </option>
             <option value="featured">Featured</option>
             <option value="popular">Popular</option>
             <option value="special">Special</option>
@@ -183,10 +137,8 @@ const ProductForm = ({ mode, initialValues, onSubmit }) => {
             onChng={formik.handleChange("quantity")}
             onBlr={formik.handleBlur("quantity")}
             val={formik.values.quantity}
+            error={formik.touched.quantity && formik.errors.quantity}
           />
-          <div className="error">
-            {formik.touched.quantity && formik.errors.quantity}
-          </div>
           <div className="bg-white border-1 p-5 text-center">
             <Dropzone
               onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}

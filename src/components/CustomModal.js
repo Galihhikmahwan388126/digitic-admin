@@ -1,15 +1,24 @@
 import React from "react";
 import { Modal } from "antd";
 
-const CustomModal = ({ open, hideModal, performAction, title, children }) => {
+const CustomModal = ({
+  open,
+  hideModal,
+  onConfirm,
+  title,
+  children,
+  confirmText,
+  showFooter = true,
+}) => {
   return (
     <Modal
       title={title}
       open={open}
-      onOk={performAction}
+      onOk={onConfirm}
       onCancel={hideModal}
-      okText="Ok"
-      cancelText="Cancel"
+      okText={confirmText || "Xác nhận"}
+      cancelText="Huỷ"
+      footer={showFooter ? null : []}
     >
       {children}
     </Modal>

@@ -1,20 +1,22 @@
 import React from "react";
 
 const CustomInput = (props) => {
-  const { type, label, i_id, i_class, name, val, onChng, onBlr } = props;
+  const { type, label, id, className, name, value, onChange, onBlur, error } =
+    props;
   return (
-    <div className="form-floating mt-3">
+    <div className="form-input mt-3">
+      <label htmlFor={label}>{label}</label>
       <input
         type={type}
-        className={`form-control ${i_class}`}
-        id={i_id}
+        className={`form-control ${className}`}
+        id={id}
         placeholder={label}
         name={name}
-        value={val}
-        onChange={onChng}
-        onBlur={onBlr}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
       />
-      <label htmlFor={label}>{label}</label>
+      {error && <div className="error">{error}</div>}
     </div>
   );
 };

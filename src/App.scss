@@ -37,6 +37,7 @@
   font-family: Roboto !important;
   color: var(--color-212529);
 }
+
 .desc {
   font: 14px;
   font-family: Roboto !important;
@@ -45,4 +46,22 @@
 
 .rounded-circle {
   border-radius: 50%;
+}
+
+.form-input {
+  input {
+    border-radius: 5px;
+    border: 1px solid var(--color-c3d4da);
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+    &:focus {
+      outline: none;
+      border: 1px solid var(--color-ffd333);
+    }
+  }
+  .error {
+    color: red;
+    font-size: 12px;
+  }
 }
