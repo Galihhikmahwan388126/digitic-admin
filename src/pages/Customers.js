@@ -16,10 +16,6 @@ const columns = [
     title: "Email",
     dataIndex: "email",
   },
-  {
-    title: "Mobile",
-    dataIndex: "mobile",
-  },
 ];
 
 const Customers = () => {
@@ -27,24 +23,20 @@ const Customers = () => {
   useEffect(() => {
     dispatch(getUsers());
   }, []);
-  const customerstate = useSelector((state) => state.customer.customers);
-  const data1 = [];
-  for (let i = 0; i < customerstate.length; i++) {
-    if (customerstate[i].role !== "admin") {
-      data1.push({
-        key: i + 1,
-        name: customerstate[i].firstname + " " + customerstate[i].lastname,
-        email: customerstate[i].email,
-        mobile: customerstate[i].mobile,
-      });
-    }
-  }
+  const customerState = useSelector((state) => state.customer.customers);
+  const customerList = customerState.map((customer, idx) => {
+    return {
+      key: idx + 1,
+      name: customer.firstname + " " + customer.lastname,
+      email: customer.email,
+    };
+  });
 
   return (
     <div>
       <h3 className="mb-4 title">Customers</h3>
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <Table columns={columns} dataSource={customerList} />
       </div>
     </div>
   );

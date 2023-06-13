@@ -21,6 +21,29 @@ export const createProducts = createAsyncThunk(
     }
   }
 );
+
+export const deleteProducts = createAsyncThunk(
+  "product/delete-products",
+  async (id, thunkAPI) => {
+    try {
+      return await productService.deleteProduct(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const getProductDetail = createAsyncThunk(
+  "product/delete-products",
+  async (id, thunkAPI) => {
+    try {
+      return await productService.getProductDetail(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
 export const resetState = createAction("Reset_all");
 
 const initialState = {
@@ -29,6 +52,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   message: "",
+  productDetail: null,
 };
 export const productSlice = createSlice({
   name: "products",
@@ -61,6 +85,36 @@ export const productSlice = createSlice({
         state.createdProduct = action.payload;
       })
       .addCase(createProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(deleteProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.deletedProduct = action.payload;
+      })
+      .addCase(deleteProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      })
+      .addCase(getProductDetail.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getProductDetail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.productDetail = action.payload;
+      })
+      .addCase(getProductDetail.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

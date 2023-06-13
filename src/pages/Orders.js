@@ -26,7 +26,6 @@ const columns = [
     title: "Date",
     dataIndex: "date",
   },
-
   {
     title: "Action",
     dataIndex: "action",

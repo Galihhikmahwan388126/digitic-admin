@@ -26,26 +26,26 @@ const MainLayout = () => {
           mode="inline"
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
-            if (key == "signout") {
+            if (key === "signout") {
             } else {
               navigate(key);
             }
           }}
           items={[
             {
-              key: "customers",
-              icon: <AiOutlineUser className="fs-4" />,
-              label: "Customers",
+              key: "products",
+              icon: <AiOutlineShoppingCart className="fs-4" />,
+              label: "Sản phảm",
             },
             {
-              key: "list-product",
-              icon: <AiOutlineShoppingCart className="fs-4" />,
-              label: "Product",
+              key: "customers",
+              icon: <AiOutlineUser className="fs-4" />,
+              label: "Người dùng",
             },
             {
               key: "orders",
               icon: <FaClipboardList className="fs-4" />,
-              label: "Orders",
+              label: "Đơn hàng",
             },
           ]}
         />
@@ -66,6 +66,7 @@ const MainLayout = () => {
                   height={32}
                   src="https://stroyka-admin.html.themeforest.scompiler.ru/variants/ltr/images/customers/customer-4-64x64.jpg"
                   alt=""
+                  className="rounded-circle"
                 />
               </div>
               <div
@@ -83,7 +84,7 @@ const MainLayout = () => {
                     style={{ height: "auto", lineHeight: "20px" }}
                     to="/"
                   >
-                    View Profile
+                    Thông tin tài khoản
                   </Link>
                 </li>
                 <li>
@@ -92,7 +93,7 @@ const MainLayout = () => {
                     style={{ height: "auto", lineHeight: "20px" }}
                     to="/"
                   >
-                    Signout
+                    Đăng xuất
                   </Link>
                 </li>
               </div>
