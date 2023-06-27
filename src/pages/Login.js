@@ -56,25 +56,25 @@ const Login = () => {
             label="Email Address"
             id="email"
             name="email"
-            onChng={formik.handleChange("email")}
-            onBlr={formik.handleBlur("email")}
-            val={formik.values.email}
+            onChange={formik.handleChange("email")}
+            onBlur={formik.handleBlur("email")}
+            value={formik.values.email}
           />
-          <div className="error mt-2">
-            {formik.touched.email && formik.errors.email}
-          </div>
+          {formik.touched.email && formik.errors.email && (
+            <div className="error mt-2">{formik.errors.email}</div>
+          )}
           <CustomInput
             type="password"
             label="Password"
             id="pass"
             name="password"
-            onChng={formik.handleChange("password")}
-            onBlr={formik.handleBlur("password")}
-            val={formik.values.password}
+            onChange={formik.handleChange("password")}
+            onBlur={formik.handleBlur("password")}
+            value={formik.values.password}
           />
-          <div className="error mt-2">
-            {formik.touched.password && formik.errors.password}
-          </div>
+          {formik.touched.password && formik.errors.password && (
+            <div className="error mt-2">{formik.errors.password}</div>
+          )}
           <div className="mb-3 text-end">
             <Link to="forgot-password" className="">
               Forgot Password?

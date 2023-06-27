@@ -3,7 +3,11 @@ import { Button, Table } from "antd";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../features/product/productSlice";
+import {
+  getProductDetail,
+  getProducts,
+  deleteProducts,
+} from "../features/product/productSlice";
 import CustomModal from "../components/CustomModal";
 import AddProduct from "./AddProduct";
 
@@ -20,11 +24,6 @@ const columns = [
     sorter: (a, b) => a.title.length - b.title.length,
   },
   {
-    title: "Brand",
-    dataIndex: "brand",
-    sorter: (a, b) => a.brand.length - b.brand.length,
-  },
-  {
     title: "Category",
     dataIndex: "category",
     sorter: (a, b) => a.category.length - b.category.length,
@@ -32,7 +31,7 @@ const columns = [
   {
     title: "Price",
     dataIndex: "price",
-    sorter: (a, b) => a.price - b.price,
+    sorter: (a, b) => a.itemPrice - b.itemPrice,
   },
   {
     title: "Action",
@@ -51,29 +50,6 @@ const ProductList = () => {
   }, []);
   const productState = useSelector((state) => state.product.products);
   const productDetail = useSelector((state) => state.product.productDetail);
-  const productList = productState.map((product, idx) => {
-    return {
-      key: idx + 1,
-      title: product.title,
-      brand: product.brand.title,
-      category: product.category.title,
-      price: product.price,
-      action: (
-        <>
-          <Button onClick={() => showModal("update")}>
-            <BiEdit />
-          </Button>
-          <Button onClick={showModal}>
-            <AiFillDelete />
-          </Button>
-        </>
-      ),
-    };
-  });
-
-  const hideModal = () => {
-    setIsOpen(false);
-  };
 
   const showModal = (type) => {
     if (type) {
@@ -82,37 +58,91 @@ const ProductList = () => {
     setIsOpen(true);
   };
 
-  const handleOk = () => {
+  const hideModal = () => {
     setIsOpen(false);
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const handleConfirm = () => {
+    setIsOpen(false);
+    if (typeModal === "delete") {
+      dispatch(deleteProducts(productDetail._id));
+    }
   };
 
-  const titleModal =
-    typeModal === "create"
-      ? "Thêm sản phẩm"
-      : typeModal === "update"
-      ? "Cập nhật sản phẩm"
-      : "Xoá sản phẩm";
+  const onSubmit = () => {
+    hideModal();
+    setTypeModal("");
+  };
+
+  const handleClickDetailButton = (event) => (productId) => {
+    event.stopPropagation();
+    dispatch(getProductDetail(productId)).then(() => showModal("update"));
+  };
+
+  const productList = productState.map((product, idx) => {
+    return {
+      key: idx + 1,
+      title: product.title,
+      category: product.category.toUpperCase(),
+      price: Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(product.price),
+      itemPrice: product.price,
+      productId: product._id,
+      action: (
+        <>
+          <Button
+            onClick={(event) => handleClickDetailButton(event)(product._id)}
+          >
+            <BiEdit />
+          </Button>
+          <Button
+            onClick={(event) => {
+              event.stopPropagation();
+              showModal("delete");
+            }}
+            className="mx-3 d-inline-block"
+          >
+            <AiFillDelete />
+          </Button>
+        </>
+      ),
+    };
+  });
+
+  const getTitleModal = () => {
+    switch (typeModal) {
+      case "create":
+        return "Thêm sản phẩm";
+      case "update":
+        return "Cập nhật sản phẩm";
+      case "delete":
+        return "Xoá sản phẩm";
+      case "detail":
+        return "Chi tiết sản phẩm";
+      default:
+        return "";
+    }
+  };
 
   return (
     <>
       <CustomModal
-        title={titleModal}
+        title={getTitleModal()}
         open={isOpen}
         hideModal={hideModal}
-        onConfirm={handleOk}
+        onConfirm={handleConfirm}
+        showFooter={typeModal === "delete"}
       >
-        {typeModal === "create" || typeModal === "update" ? (
+        {["create", "update", "detail"].includes(typeModal) ? (
           <AddProduct
             mode={typeModal}
             onSubmit={onSubmit}
             initialValues={typeModal === "create" ? {} : productDetail}
           />
         ) : (
-          <h1>Bạn có muốn xoá?</h1>
+          <p>Bạn có muốn xoá sản phẩm?</p>
         )}
       </CustomModal>
       <div>
@@ -123,7 +153,19 @@ const ProductList = () => {
           </Button>
         </div>
         <div>
-          <Table columns={columns} dataSource={productList} />
+          <Table
+            columns={columns}
+            onRow={(record) => {
+              return {
+                onClick: () => {
+                  dispatch(getProductDetail(record.productId)).then(() =>
+                    showModal("detail")
+                  );
+                },
+              };
+            }}
+            dataSource={productList}
+          />
         </div>
       </div>
     </>

@@ -35,7 +35,7 @@ const MainLayout = () => {
             {
               key: "",
               icon: <AiOutlineShoppingCart className="fs-4" />,
-              label: "Sản phảm",
+              label: "Sản phẩm",
             },
             {
               key: "customers",
@@ -102,8 +102,8 @@ const MainLayout = () => {
         </Header>
         <Content
           style={{
-            margin: "24px 16px",
-            padding: 24,
+            margin: "12px 8px",
+            padding: 10,
             minHeight: 280,
             background: colorBgContainer,
           }}

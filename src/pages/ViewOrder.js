@@ -5,6 +5,7 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { Link, useLocation } from "react-router-dom";
 import { getOrderByUser } from "../features/auth/authSlice";
+import { formatPrice } from "./Orders";
 const columns = [
   {
     title: "SNo",
@@ -26,15 +27,6 @@ const columns = [
     title: "Amount",
     dataIndex: "amount",
   },
-  {
-    title: "Date",
-    dataIndex: "date",
-  },
-
-  {
-    title: "Action",
-    dataIndex: "action",
-  },
 ];
 
 const ViewOrder = () => {
@@ -44,25 +36,17 @@ const ViewOrder = () => {
   useEffect(() => {
     dispatch(getOrderByUser(userId));
   }, []);
-  const orderState = useSelector((state) => state.auth.orderbyuser[0].products);
+  const orderState = useSelector(
+    (state) => state.auth.orderbyuser?.products || []
+  );
   const data1 = orderState.map((order, idx) => {
+    console.log("🚀 ~ file: ViewOrder.js:70 ~ data1 ~ order:", order);
     return {
       key: idx + 1,
       name: order.product.title,
-      brand: order.product.brand,
-      count: order.count,
-      amount: order.product.price,
-      date: order.product.createdAt,
-      action: (
-        <>
-          <Link to="/" className=" fs-3 text-danger">
-            <BiEdit />
-          </Link>
-          <Link className="ms-3 fs-3 text-danger" to="/">
-            <AiFillDelete />
-          </Link>
-        </>
-      ),
+      brand: order.product.category,
+      count: order.quantity,
+      amount: formatPrice(order.product.price),
     };
   });
   return (

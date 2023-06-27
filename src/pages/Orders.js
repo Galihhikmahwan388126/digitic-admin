@@ -31,6 +31,17 @@ const columns = [
     dataIndex: "action",
   },
 ];
+const formatYYYYdd = (date) => {
+  const d = new Date(date || "");
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+};
+
+export const formatPrice = (number) => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(number);
+};
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -39,18 +50,25 @@ const Orders = () => {
   }, []);
   const orderState = useSelector((state) => state.auth.orders);
 
+  const getTotalAmountOrder = (order) => {
+    const amount = order.products.reduce((total, order) => {
+      return total + order.product.price * order.quantity;
+    }, 0);
+    return formatPrice(amount);
+  };
+
   const data1 = [];
   for (let i = 0; i < orderState.length; i++) {
     data1.push({
       key: i + 1,
-      name: orderState[i].orderby.firstname,
+      name: orderState[i].name,
       product: (
-        <Link to={`/admin/order/${orderState[i].orderby._id}`}>
-          View Orders
-        </Link>
+        <Link to={`/admin/order/${orderState[i]._id}`}>View Orders</Link>
       ),
-      amount: orderState[i].paymentIntent.amount,
-      date: new Date(orderState[i].createdAt).toLocaleString(),
+      amount: getTotalAmountOrder(orderState[i]),
+      date: formatYYYYdd(
+        orderState[i].createdAt ? orderState[i].createdAt : ""
+      ),
       action: (
         <>
           <Link to="/" className=" fs-3 text-danger">
